@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ren x Bhanu Kumar · Proof of Work</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:    #0a0c10;
+  --bg2:   #0e1116;
+  --bg3:   #131720;
+  --bg4:   #181d28;
+  --bg5:   #1f2530;
+  --bdr:   rgba(255,255,255,0.07);
+  --bmd:   rgba(255,255,255,0.12);
+  --blg:   rgba(255,255,255,0.20);
+  --t1:    #ece8e0;
+  --t2:    #8d8f97;
+  --t3:    #454a55;
+
+  /* Accent: brass / gold, the philanthropic and wealth-management register */
+  --gd:    #c9a347;
+  --gd2:   #e0bd63;
+  --gddim: rgba(201,163,71,0.10);
+  --gdglow:rgba(201,163,71,0.20);
+  --gdt:   #e3c373;
+
+  /* Secondary: deep teal, the "neutral infrastructure" register */
+  --tl:    #2f8f6e;
+  --tldim: rgba(47,143,110,0.10);
+  --tlt:   #5cb897;
+
+  /* Semantic */
+  --grn:   #3dba7a;
+  --grndim:rgba(61,186,122,0.09);
+  --amb:   #d99a3a;
+  --ambdim:rgba(217,154,58,0.09);
+  --red:   #df6259;
+  --reddim:rgba(223,98,89,0.09);
+}
+
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{
+  background:var(--bg);color:var(--t1);
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:16px;line-height:1.72;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* reading bar */
+#rbar{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--gd),var(--tl));z-index:999;width:0;transition:width .08s linear}
+
+/* ===== NAV ===== */
+.nav{
+  position:sticky;top:0;z-index:300;
+  background:rgba(10,12,16,0.94);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--bdr);
+  padding:0 5vw;
+}
+.nav-i{max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:58px;gap:16px}
+.nav-brand{display:flex;align-items:center;gap:9px;flex-shrink:0;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--t3);letter-spacing:.04em}
+.nav-brand .sep{color:var(--t3);margin:0 3px}
+.nav-brand .hi{color:var(--gdt)}
+.nav-links{display:flex;gap:2px}
+.nl{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;padding:5px 13px;border-radius:100px;border:1px solid transparent;color:var(--t3);text-decoration:none;transition:all .13s;white-space:nowrap}
+.nl:hover{border-color:var(--bdr);color:var(--t2)}
+.nl.cta{background:var(--gddim);border-color:rgba(201,163,71,.25);color:var(--gdt)}
+.nl.cta:hover{background:rgba(201,163,71,.18);border-color:rgba(201,163,71,.4)}
+.hbg{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;flex-shrink:0}
+.hbg span{display:block;width:20px;height:1.5px;background:var(--t1);border-radius:2px;transition:transform .3s,opacity .3s}
+.hbg.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.hbg.open span:nth-child(2){opacity:0}
+.hbg.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+.mob-menu{display:none;position:fixed;inset:0;top:58px;background:var(--bg);z-index:290;flex-direction:column;padding:28px 5vw;border-top:1px solid var(--bdr)}
+.mob-menu.open{display:flex}
+.mob-menu a{display:block;font-size:21px;font-family:'Newsreader',serif;font-weight:500;font-style:italic;color:var(--t1);text-decoration:none;padding:16px 0;border-bottom:1px solid var(--bdr)}
+.mob-menu a:last-child{border-bottom:none}
+.mob-menu a.mob-cta{color:var(--gdt)}
+@media(max-width:760px){.nav-links{display:none}.hbg{display:flex}}
+
+/* ===== LAYOUT ===== */
+.wrap{max-width:1180px;margin:0 auto;padding:0 5vw}
+section{padding:84px 0;border-bottom:1px solid var(--bdr)}
+
+/* ===== REVEAL ===== */
+.rv{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
+.rv.in{opacity:1;transform:none}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--gd);border-radius:2px}
+
+/* ===== HERO ===== */
+.hero-wrap{border-bottom:1px solid var(--bdr);padding:68px 5vw 60px;max-width:1180px;margin:0 auto}
+
+/* --- Partner-skin slider --- */
+.ps-container{
+  position:relative;width:100%;height:clamp(280px,40vw,420px);
+  border-radius:14px;overflow:hidden;border:1px solid var(--bdr);
+  cursor:col-resize;user-select:none;-webkit-user-select:none;
+  margin-bottom:18px;background:var(--bg3);
+}
+.ps-after,.ps-before{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.ps-after{background:linear-gradient(150deg,#111521 0%,#0c0f15 100%)}
+.ps-before{width:50%;overflow:hidden;border-right:none}
+.ps-before-inner{position:relative;height:100%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* Portal card mockup, shared shape, two skins */
+.portal-card{width:min(82%,440px);border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,0.09);background:#0d1117;box-shadow:0 24px 48px rgba(0,0,0,0.4)}
+.portal-top{display:flex;align-items:center;gap:8px;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,0.07)}
+.portal-mark{width:18px;height:18px;border-radius:5px;flex-shrink:0}
+.portal-word{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.03em}
+.portal-sub{font-family:'Inter',sans-serif;font-size:9px;color:#6c7280;margin-left:auto}
+.portal-body{padding:18px 16px 20px}
+.portal-lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#6c7280;margin-bottom:6px}
+.portal-bal{font-family:'Newsreader',serif;font-size:25px;font-weight:500;margin-bottom:14px}
+.portal-btn{display:inline-block;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;padding:7px 14px;border-radius:7px;margin-bottom:16px}
+.portal-row{display:flex;justify-content:space-between;font-family:'Inter',sans-serif;font-size:10.5px;color:#9aa0ab;padding:6px 0;border-top:1px solid rgba(255,255,255,0.05)}
+
+/* unbranded skin */
+.skin-generic .portal-mark{background:#3b4150}
+.skin-generic .portal-word{color:#cfd2d8}
+.skin-generic .portal-bal{color:#e4e6ea}
+.skin-generic .portal-btn{background:#272d3a;color:#c7cbd3}
+
+/* firm-branded skin */
+.skin-firm .portal-mark{background:linear-gradient(135deg,var(--gd),var(--gd2))}
+.skin-firm .portal-word{color:var(--gdt)}
+.skin-firm .portal-bal{color:#f1e6cc}
+.skin-firm .portal-btn{background:linear-gradient(135deg,var(--gd),var(--gd2));color:#1b1404}
+
+.ps-label{position:absolute;top:14px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:5px 11px;border-radius:100px;background:rgba(0,0,0,0.5);backdrop-filter:blur(6px);z-index:5}
+.ps-label.lft{left:14px;color:#cfd2d8}
+.ps-label.rgt{right:14px;color:var(--gdt)}
+
+.ps-divider{position:absolute;top:0;bottom:0;width:2px;background:var(--gd);left:50%;transform:translateX(-50%);z-index:4;box-shadow:0 0 14px var(--gdglow)}
+.ps-handle{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;background:var(--bg);border:1px solid var(--gd);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.5)}
+.ps-handle svg{width:14px;height:12px;stroke:var(--gd);stroke-width:1.6;fill:none}
+
+.ps-caption{display:flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--t3);letter-spacing:.02em;margin-bottom:44px}
+.ps-caption .dot{width:5px;height:5px;border-radius:50%;background:var(--gd);flex-shrink:0}
+
+/* hero text */
+.hero-text{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;flex-wrap:wrap}
+.hero-kicker{display:flex;align-items:center;gap:9px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:22px}
+.hero-kicker-bar{width:22px;height:1.5px;background:var(--gd)}
+.hero-h{font-family:'Newsreader',serif;font-weight:500;font-size:clamp(34px,4.6vw,54px);line-height:1.08;letter-spacing:-.01em;color:var(--t1);margin-bottom:20px}
+.hero-h em{font-style:italic;color:var(--gdt);font-weight:500}
+.hero-desc{font-size:16.5px;color:var(--t2);max-width:600px;line-height:1.75;margin-bottom:22px}
+.hero-desc strong{color:var(--t1);font-weight:600}
+.hero-badge{display:inline-flex;align-items:center;gap:9px;background:var(--tldim);color:var(--tlt);border:1px solid rgba(47,143,110,.25);font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.03em;padding:7px 14px;border-radius:8px}
+.hero-badge .dt{width:6px;height:6px;border-radius:50%;background:var(--tl)}
+.hero-actions{display:flex;flex-direction:column;align-items:flex-end;gap:16px}
+.hero-links{display:flex;gap:10px}
+.btn-ghost{font-family:'Inter',sans-serif;font-size:12.5px;font-weight:500;padding:8px 16px;border-radius:8px;border:1px solid var(--bdr);color:var(--t2);text-decoration:none;transition:all .14s}
+.btn-ghost:hover{border-color:var(--bmd);color:var(--t1)}
+.btn-gd{font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;padding:8px 18px;border-radius:8px;background:var(--gd);color:#16110a;text-decoration:none;transition:opacity .14s}
+.btn-gd:hover{opacity:.87}
+.hero-toc{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.hero-toc a{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--t3);text-decoration:none;transition:color .14s}
+.hero-toc a:hover{color:var(--t2)}
+@media(max-width:720px){.hero-text{flex-direction:column;align-items:flex-start}.hero-actions{align-items:flex-start}.hero-toc{align-items:flex-start}}
+
+/* ===== SEC HEADER ===== */
+.sec-ey{display:flex;align-items:center;gap:11px;margin-bottom:18px}
+.sec-tag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gdt);background:var(--gddim);border:1px solid rgba(201,163,71,.22);padding:3px 12px;border-radius:100px;letter-spacing:.06em;white-space:nowrap}
+.sec-label{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--t3)}
+.sec-h{font-family:'Newsreader',serif;font-weight:500;font-size:clamp(24px,2.6vw,32px);color:var(--t1);margin-bottom:14px;letter-spacing:-.005em}
+.sec-sub{font-size:15.5px;color:var(--t2);max-width:680px;line-height:1.7;margin-bottom:40px}
+.sec-sub strong{color:var(--t1);font-weight:600}
+
+/* ===== AUDIT GRID ===== */
+.audit-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.audit-cell{background:var(--bg2);border:1px solid var(--bdr);border-radius:12px;padding:26px}
+.audit-cell.full{grid-column:1/-1}
+.audit-label{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-bottom:10px}
+.audit-cell h3{font-family:'Newsreader',serif;font-weight:500;font-size:18.5px;color:var(--t1);margin-bottom:11px;line-height:1.35}
+.audit-cell p{font-size:14.5px;color:var(--t2);line-height:1.68}
+.audit-cell p strong{color:var(--t1);font-weight:600}
+.badge-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+.badge{display:inline-flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;padding:4px 10px;border-radius:100px;letter-spacing:.02em}
+.badge .dot{width:5px;height:5px;border-radius:50%}
+.badge.ok{background:var(--grndim);color:var(--grn)}
+.badge.ok .dot{background:var(--grn)}
+.badge.warn{background:var(--ambdim);color:var(--amb)}
+.badge.warn .dot{background:var(--amb)}
+.badge.gap{background:var(--reddim);color:var(--red)}
+.badge.gap .dot{background:var(--red)}
+.badge.tl{background:var(--tldim);color:var(--tlt)}
+.badge.tl .dot{background:var(--tl)}
+@media(max-width:760px){.audit-grid{grid-template-columns:1fr}}
+
+/* ===== AUDIT FEATURE (Observation > Evidence > Impact > Recommendation) ===== */
+.audit-feature{background:var(--bg2);border:1px solid rgba(201,163,71,.25);border-radius:14px;padding:32px;margin-bottom:16px}
+.audit-feature-tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--gdt);background:var(--gddim);padding:3px 11px;border-radius:100px;letter-spacing:.06em;margin-bottom:16px}
+.audit-feature h3{font-family:'Newsreader',serif;font-weight:500;font-size:23px;color:var(--t1);margin-bottom:24px;line-height:1.32;max-width:680px}
+.af-rows{display:grid;grid-template-columns:1fr 1fr;gap:20px 30px}
+.af-row{padding-top:16px;border-top:1px solid var(--bdr)}
+.af-row .af-lbl{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.af-row .af-lbl .n{width:17px;height:17px;border-radius:50%;background:var(--gddim);color:var(--gdt);font-size:9px;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;flex-shrink:0}
+.af-row p{font-size:14px;color:var(--t2);line-height:1.6}
+.af-row p strong{color:var(--t1);font-weight:600}
+@media(max-width:760px){.af-rows{grid-template-columns:1fr}}
+
+.audit-mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.audit-mini{background:var(--bg2);border:1px solid var(--bdr);border-radius:10px;padding:18px 20px}
+.audit-mini .am-lbl{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:7px;display:block}
+.audit-mini.ok .am-lbl{color:var(--grn)}
+.audit-mini.gap .am-lbl{color:var(--red)}
+.audit-mini p{font-size:13.5px;color:var(--t2);line-height:1.55}
+.audit-mini p strong{color:var(--t1);font-weight:600}
+@media(max-width:600px){.audit-mini-grid{grid-template-columns:1fr}}
+
+/* ===== LAUNCH SCORECARD ===== */
+.score-table{width:100%;border-collapse:collapse;font-size:13.5px}
+.score-table th{text-align:left;font-family:'Inter',sans-serif;font-weight:600;font-size:12px;color:var(--t1);padding:11px 16px;border-bottom:1px solid var(--bmd)}
+.score-table td{padding:14px 16px;border-bottom:1px solid var(--bdr);color:var(--t2);line-height:1.5;vertical-align:top}
+.score-table td:first-child{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.04em;color:var(--gdt);white-space:nowrap}
+.score-table td:nth-child(2){color:var(--t1);font-weight:500}
+
+/* ===== BUYER MAP TABS ===== */
+.ptabs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
+.ptab{background:var(--bg2);border:1px solid var(--bdr);border-radius:11px;padding:16px 18px;text-align:left;cursor:pointer;transition:all .15s;font-family:inherit}
+.ptab:hover{border-color:var(--bmd)}
+.ptab.on{border-color:rgba(201,163,71,.4);background:var(--gddim)}
+.ptab-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-bottom:6px}
+.ptab.on .ptab-label{color:var(--gdt)}
+.ptab-name{font-family:'Newsreader',serif;font-weight:500;font-size:17px;color:var(--t1);margin-bottom:4px}
+.ptab-role{font-size:12.5px;color:var(--t3);line-height:1.4}
+.pcard{background:var(--bg2);border:1px solid var(--bdr);border-radius:14px;padding:30px}
+.pcard-hdr{margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--bdr)}
+.pcard-hdr .tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--gdt);background:var(--gddim);padding:3px 11px;border-radius:100px;margin-bottom:10px}
+.pcard-hdr h4{font-family:'Newsreader',serif;font-weight:500;font-size:23px;color:var(--t1);margin-bottom:6px}
+.pcard-hdr p{font-size:13.5px;color:var(--t3)}
+.pcard-body{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.pcard-col h5{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--t1);margin-bottom:12px}
+.pcard-col ul{list-style:none}
+.pcard-col li{font-size:14px;color:var(--t2);line-height:1.6;padding-left:16px;position:relative;margin-bottom:10px}
+.pcard-col li::before{content:'';position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:var(--gd)}
+.pcard-msg{grid-column:1/-1;background:var(--bg3);border-left:2px solid var(--gd);border-radius:0 8px 8px 0;padding:16px 18px;margin-top:2px}
+.pcard-msg h5{font-family:'Inter',sans-serif;font-size:11.5px;font-weight:600;color:var(--gdt);margin-bottom:8px}
+.pcard-msg p{font-family:'Newsreader',serif;font-style:italic;font-size:15.5px;color:var(--t1);line-height:1.55}
+@media(max-width:760px){.ptabs{grid-template-columns:1fr}.pcard-body{grid-template-columns:1fr}}
+
+/* ===== CAMPAIGN BRIEF ===== */
+.cb-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-bottom:46px}
+.cb-card{background:var(--bg2);border:1px solid var(--bdr);border-radius:12px;padding:24px}
+.cb-card h4{display:flex;align-items:center;gap:10px;font-family:'Inter',sans-serif;font-weight:600;font-size:14.5px;color:var(--t1);margin-bottom:14px}
+.cb-ico{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.cb-ico.gd{background:var(--gddim)}
+.cb-ico.tl{background:var(--tldim)}
+.cb-ico.amb{background:var(--ambdim)}
+.cb-ico.grn{background:var(--grndim)}
+.cb-card ul{list-style:none}
+.cb-card li{font-size:14px;color:var(--t2);line-height:1.62;padding-left:15px;position:relative;margin-bottom:9px}
+.cb-card li::before{content:'';position:absolute;left:0;top:7px;width:4px;height:4px;border-radius:50%;background:var(--t3)}
+.cb-card li strong{color:var(--t1);font-weight:600}
+@media(max-width:760px){.cb-grid{grid-template-columns:1fr}}
+
+.tl-head{font-family:'Inter',sans-serif;font-weight:600;font-size:15px;color:var(--t1);margin-bottom:20px}
+.timeline{display:flex;flex-direction:column;gap:0;border-left:1px solid var(--bdr);padding-left:24px;margin-left:6px}
+.tl-row{position:relative;padding-bottom:26px}
+.tl-row:last-child{padding-bottom:0}
+.tl-row::before{content:'';position:absolute;left:-29px;top:3px;width:9px;height:9px;border-radius:50%;background:var(--bg);border:2px solid var(--gd)}
+.tl-day{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gdt);letter-spacing:.04em;margin-bottom:5px}
+.tl-body h5{font-family:'Newsreader',serif;font-weight:500;font-size:16.5px;color:var(--t1);margin-bottom:5px}
+.tl-body p{font-size:14px;color:var(--t2);line-height:1.62;max-width:680px}
+
+.metric-chips{display:flex;flex-wrap:wrap;gap:10px}
+.mchip{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gdt);background:var(--gddim);border:1px solid rgba(201,163,71,.22);padding:7px 14px;border-radius:8px}
+
+/* ===== COMPETITIVE TABLE ===== */
+.comp-table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:680px}
+.comp-table th{text-align:left;font-family:'Inter',sans-serif;font-weight:600;font-size:12.5px;color:var(--t1);padding:12px 16px;border-bottom:1px solid var(--bmd);white-space:nowrap}
+.comp-table th.hl{color:var(--gdt)}
+.comp-table td{padding:14px 16px;border-bottom:1px solid var(--bdr);color:var(--t2);line-height:1.55;vertical-align:top}
+.comp-table td.hl{background:var(--gddim);color:var(--t1);border-radius:0}
+.comp-table td:first-child{font-weight:600;color:var(--t1);white-space:nowrap}
+.pull{font-family:'Newsreader',serif;font-style:italic;font-size:19px;line-height:1.55;color:var(--t1);max-width:780px;margin-top:36px;padding-top:30px;border-top:1px solid var(--bdr)}
+
+/* ===== OTHER WORK ===== */
+.ow-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.ow-card{display:block;background:var(--bg2);border:1px solid var(--bdr);border-radius:12px;padding:24px;text-decoration:none;transition:all .16s}
+.ow-card:hover{border-color:var(--bmd);transform:translateY(-2px)}
+.ow-card.featured{grid-column:1/-1;background:linear-gradient(135deg,var(--bg2),var(--bg3))}
+.ow-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.ow-co{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--gdt)}
+.ow-arrow{color:var(--t3);font-size:15px;transition:transform .15s}
+.ow-card:hover .ow-arrow{transform:translate(2px,-2px);color:var(--gdt)}
+.ow-card h3{font-family:'Newsreader',serif;font-weight:500;font-size:18px;color:var(--t1);margin-bottom:9px;line-height:1.35}
+.ow-card p{font-size:13.5px;color:var(--t2);line-height:1.6;margin-bottom:14px}
+.ow-tags{display:flex;flex-wrap:wrap;gap:6px}
+.ow-tag{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--t3);background:var(--bg3);border:1px solid var(--bdr);padding:3px 9px;border-radius:100px}
+@media(max-width:760px){.ow-grid{grid-template-columns:1fr}}
+
+/* ===== NOTE ===== */
+.note{font-size:12.5px;color:var(--t3);line-height:1.6;max-width:780px;font-style:italic}
+
+/* ===== FOOTER ===== */
+.footer{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;padding:36px 0}
+.footer-name{font-family:'Newsreader',serif;font-weight:500;font-size:17px;color:var(--t1)}
+.footer-copy{font-size:12.5px;color:var(--t3)}
+.footer-links{display:flex;gap:22px}
+.footer-links a{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--t2);text-decoration:none;transition:color .14s}
+.footer-links a:hover{color:var(--gdt)}
+</style>
+</head>
+<body>
+
+<div id="rbar"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-i">
+    <div class="nav-brand">
+      <span>bhanu kumar</span><span class="sep">/</span><span class="hi">ren</span>
+    </div>
+    <div class="nav-links">
+      <a href="#audit" class="nl">Audit</a>
+      <a href="#buyers" class="nl">Buyer Map</a>
+      <a href="#scorecard" class="nl">Scorecard</a>
+      <a href="#campaign" class="nl">Campaign</a>
+      <a href="#landscape" class="nl">Landscape</a>
+      <a href="#work" class="nl">Other Work</a>
+      <a href="https://drive.google.com/file/d/1M4tArzx0SiazLaBY8UFWdzGS5mTumtgU/view" target="_blank" rel="noopener" class="nl cta">Resume</a>
+    </div>
+    <button class="hbg" id="hbg" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="mob-menu" id="mob-menu">
+  <a href="#audit" onclick="closeMob()">Partner Audit</a>
+  <a href="#buyers" onclick="closeMob()">Buyer Map</a>
+  <a href="#scorecard" onclick="closeMob()">Launch Scorecard</a>
+  <a href="#campaign" onclick="closeMob()">Campaign Brief</a>
+  <a href="#landscape" onclick="closeMob()">Landscape</a>
+  <a href="#work" onclick="closeMob()">Other Work</a>
+  <a href="https://drive.google.com/file/d/1M4tArzx0SiazLaBY8UFWdzGS5mTumtgU/view" target="_blank" class="mob-cta">Resume</a>
+</div>
+
+<!-- HERO -->
+<div class="hero-wrap">
+
+  <div class="ps-container" id="psContainer">
+    <div class="ps-after">
+      <div class="portal-card skin-firm">
+        <div class="portal-top">
+          <div class="portal-mark"></div>
+          <div class="portal-word">BIRCHWOOD PARTNERS</div>
+          <div class="portal-sub">Powered by Ren</div>
+        </div>
+        <div class="portal-body">
+          <div class="portal-lbl">Giving Account Balance</div>
+          <div class="portal-bal">$284,560</div>
+          <div class="portal-btn">Recommend a Grant</div>
+          <div class="portal-row"><span>American Red Cross</span><span>$5,000</span></div>
+          <div class="portal-row"><span>St. Jude Children's</span><span>$2,500</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="ps-before" id="psBefore">
+      <div class="ps-before-inner" id="psBeforeInner">
+        <div class="portal-card skin-generic">
+          <div class="portal-top">
+            <div class="portal-mark"></div>
+            <div class="portal-word">REN DIRECT</div>
+            <div class="portal-sub">Generic program</div>
+          </div>
+          <div class="portal-body">
+            <div class="portal-lbl">Giving Account Balance</div>
+            <div class="portal-bal">$284,560</div>
+            <div class="portal-btn">Recommend a Grant</div>
+            <div class="portal-row"><span>American Red Cross</span><span>$5,000</span></div>
+            <div class="portal-row"><span>St. Jude Children's</span><span>$2,500</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ps-label lft">Unbranded</div>
+    <div class="ps-label rgt">Firm-branded</div>
+    <div class="ps-divider" id="psDivider">
+      <div class="ps-handle" id="psHandle">
+        <svg viewBox="0 0 20 16"><polyline points="6,2 2,8 6,14"/><polyline points="14,2 18,8 14,14"/></svg>
+      </div>
+    </div>
+  </div>
+  <div class="ps-caption"><span class="dot"></span>Drag the divider. Same balance, same grants, same engine. Only the name on the door changes.</div>
+
+  <div class="hero-text">
+    <div>
+      <div class="hero-kicker"><span class="hero-kicker-bar"></span>Product Marketing · Enterprise Partner Marketing · Wealth Management</div>
+      <h1 class="hero-h">Signing the firm isn't the job.<br>Getting advisors to <em>use it</em> is.</h1>
+      <p class="hero-desc">Here's how I'd approach enterprise partner marketing at Ren.</p>
+      <div class="hero-badge"><span class="dt"></span>150+ DAF programs · $175B+ in charitable assets · Indianapolis, since 1987</div>
+    </div>
+    <div class="hero-actions">
+      <div class="hero-links">
+        <a href="https://www.linkedin.com/in/bhanuexcalibur/" target="_blank" rel="noopener" class="btn-ghost">LinkedIn</a>
+        <a href="https://drive.google.com/file/d/1M4tArzx0SiazLaBY8UFWdzGS5mTumtgU/view" target="_blank" rel="noopener" class="btn-gd">Resume ↗</a>
+      </div>
+      <div class="hero-toc">
+        <a href="#audit">Partner Experience Audit</a>
+        <a href="#buyers">Enterprise Buyer Map</a>
+        <a href="#scorecard">Launch Scorecard</a>
+        <a href="#campaign">Advisor Campaign Brief</a>
+        <a href="#landscape">Competitive Landscape</a>
+        <a href="#work">Other Work</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 01 AUDIT -->
+<section id="audit">
+  <div class="wrap">
+    <div class="sec-ey rv"><span class="sec-tag">01 · Partner Experience Audit</span><span class="sec-label">Reading the advisor's actual experience</span></div>
+    <h2 class="sec-h rv">The homepage is fine. The FAQ tells the real story.</h2>
+    <p class="sec-sub rv">I read Ren's advisor resources the way an advisor actually would, not as marketing copy. One finding mattered more than the rest.</p>
+
+    <div class="audit-feature rv">
+      <span class="audit-feature-tag">Highest-priority finding</span>
+      <h3>The Giving Season FAQ works as an incident log, not as advisor enablement.</h3>
+      <div class="af-rows">
+        <div class="af-row">
+          <div class="af-lbl"><span class="n">1</span>Observation</div>
+          <p>The FAQ bundles a dozen real advisor questions into one page, published right as Giving Season volume peaks.</p>
+        </div>
+        <div class="af-row">
+          <div class="af-lbl"><span class="n">2</span>Evidence</div>
+          <p>Live on the page today: which portal to log into, why an account isn't showing online yet, when credentials arrive, whether the December 19 deadline applies.</p>
+        </div>
+        <div class="af-row">
+          <div class="af-lbl"><span class="n">3</span>Business impact</div>
+          <p>Each unanswered question becomes a support ticket and a delayed grant, in the exact window where processing speed decides whether a gift counts for the year's deduction.</p>
+        </div>
+        <div class="af-row">
+          <div class="af-lbl"><span class="n">4</span>Recommendation</div>
+          <p><strong>Replace the reactive FAQ with a tiered advisor calendar</strong> that answers these questions before October. Full brief in section 04.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="audit-mini-grid rv">
+      <div class="audit-mini ok">
+        <span class="am-lbl">Already working</span>
+        <p>The custody-neutral pitch answers the firm's biggest fear, losing the client relationship, directly on the homepage. <strong>Rare directness for enterprise software.</strong> Worth leaning on harder, not changing.</p>
+      </div>
+      <div class="audit-mini gap">
+        <span class="am-lbl">Gap to flag</span>
+        <p>Messaging is built for firms with no DAF program yet. <strong>Firms running a legacy or in-house program get no explicit switch case</strong>, even though that's a meaningful slice of the realistic pipeline.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 BUYER MAP -->
+<section id="buyers">
+  <div class="wrap">
+    <div class="sec-ey rv"><span class="sec-tag">02 · Enterprise Buyer Map</span><span class="sec-label">One program, three different reasons to care</span></div>
+    <h2 class="sec-h rv">The firm signs once. Three people have to keep believing it.</h2>
+    <p class="sec-sub rv">A partner program doesn't stay sold at signature. It has to keep working for the sponsor, the advisor, and whoever's running the relationship day to day.</p>
+
+    <div class="ptabs rv" id="ptabs"></div>
+    <div class="pcard rv" id="pcard"></div>
+  </div>
+</section>
+
+<!-- 03 LAUNCH SCORECARD -->
+<section id="scorecard">
+  <div class="wrap">
+    <div class="sec-ey rv"><span class="sec-tag">03 · Launch Scorecard</span><span class="sec-label">How I'd measure whether this is working</span></div>
+    <h2 class="sec-h rv">Signing isn't the finish line. Here's what I'd track after.</h2>
+    <p class="sec-sub rv">Six stages, one KPI each, mapped to the buyer map above. This is the scorecard I'd bring to the first partner review, not just the campaign recap.</p>
+
+    <div class="rv" style="overflow-x:auto">
+      <table class="score-table">
+        <thead><tr><th>Stage</th><th>KPI</th><th>Why it matters</th></tr></thead>
+        <tbody>
+          <tr><td>Enablement</td><td>% of advisors completing onboarding</td><td>Whether the program is structurally ready to be used</td></tr>
+          <tr><td>Adoption</td><td>% of advisors recommending at least one DAF</td><td>The real adoption signal, not just awareness</td></tr>
+          <tr><td>Engagement</td><td>Email CTR on advisor enablement sends</td><td>Whether messaging cuts through, not just gets sent</td></tr>
+          <tr><td>Retention</td><td>% of activated advisors still active at 90 days</td><td>Adoption that doesn't stick isn't adoption</td></tr>
+          <tr><td>Support</td><td>FAQ and login-related ticket volume</td><td>A proxy for how much friction marketing actually removed</td></tr>
+          <tr><td>Business</td><td>Assets added through the program</td><td>The number the firm and Ren both ultimately care about</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 04 CAMPAIGN BRIEF -->
+
+<section id="campaign">
+  <div class="wrap">
+    <div class="sec-ey rv"><span class="sec-tag">04 · Sample Campaign Brief</span><span class="sec-label">Giving Season Advisor Activation</span></div>
+    <h2 class="sec-h rv">Closing the gap the audit found, before November</h2>
+    <p class="sec-sub rv">The brief that turns the Giving Season FAQ into a planned, tiered advisor activation, September through year-end.</p>
+
+    <div class="cb-grid rv">
+      <div class="cb-card">
+        <h4><span class="cb-ico gd">🎯</span>Objective</h4>
+        <ul>
+          <li><strong>Primary:</strong> Cut Giving Season support volume tied to login and account-status confusion by moving advisor education earlier in the calendar</li>
+          <li><strong>Secondary:</strong> Increase advisors introducing DAFs before Q4, when processing is fastest and decisions are calmer</li>
+          <li><strong>Business signal:</strong> Earlier funding, which Ren's own advisor resources already flag as the better outcome</li>
+        </ul>
+      </div>
+      <div class="cb-card">
+        <h4><span class="cb-ico tl">👥</span>Audience tiers</h4>
+        <ul>
+          <li><strong>Tier 1, Catalysts Club:</strong> high-engagement, gets the calendar first so they can model it for peers</li>
+          <li><strong>Tier 2, occasional:</strong> recommended a DAF once or twice, needs a reminder and a leave-behind, not a re-pitch</li>
+          <li><strong>Tier 3, never-recommended:</strong> needs the basic case, tied to a real scenario like a stock sale or a high-income year</li>
+        </ul>
+      </div>
+      <div class="cb-card">
+        <h4><span class="cb-ico amb">✍️</span>Key messages by tier</h4>
+        <ul>
+          <li><strong>Tier 1:</strong> "Clients who fund early get faster processing. Here's this week's one-pager."</li>
+          <li><strong>Tier 2:</strong> "It's been a while. Here's the 90-second version for your next review."</li>
+          <li><strong>Tier 3:</strong> "Clients who discuss giving with their advisor are far more likely to donate appreciated assets instead of cash. That conversation is the value-add."</li>
+        </ul>
+      </div>
+      <div class="cb-card">
+        <h4><span class="cb-ico grn">🤖</span>Where AI actually does the work</h4>
+        <ul>
+          <li>Cluster last year's Giving Season support tickets with an LLM to surface the 3 or 4 recurring objections before October, instead of relearning them live</li>
+          <li>Summarize Catalysts Club relationship manager notes into monthly theme briefs, so Tier 1 messaging reflects what advisors are actually asking</li>
+          <li>Flag advisors with no DAF recommendation in 12 months from existing platform data, and route them into Tier 3 automatically</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-head rv">Calendar: September through year-end</div>
+    <div class="timeline rv">
+      <div class="tl-row">
+        <div class="tl-day">Weeks 1–3 · Early September</div>
+        <div class="tl-body"><h5>Internal readiness</h5><p>Brief the Catalysts Club service team so support matches what's in advisors' inboxes. Lock Tier 1 to Tier 3 segmentation with data, not guesswork.</p></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-day">Weeks 4–7 · Mid to late September</div>
+        <div class="tl-body"><h5>Tier 1 activation</h5><p>Send Catalysts Club advisors the early-funding one-pager. Track which scenarios land, to sharpen Tier 2 and 3 before they ship.</p></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-day">Weeks 8–12 · October</div>
+        <div class="tl-body"><h5>Tier 2 and Tier 3 push</h5><p>Roll out reminders and first-conversation scripts, paired with a client-ready one-pager for portfolio reviews.</p></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-day">November to December 19</div>
+        <div class="tl-body"><h5>Peak season support</h5><p>Replace the FAQ with one status page: login by program type, what the deadline means for taxes, a direct line to support.</p></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-day">January</div>
+        <div class="tl-body"><h5>Retro</h5><p>Compare ticket volume and early-funding rates to last year. Keep what worked as a standing September playbook.</p></div>
+      </div>
+    </div>
+
+    <div class="tl-head rv" style="margin-top:40px">Success metrics</div>
+    <div class="metric-chips rv">
+      <span class="mchip">Advisor activation rate</span>
+      <span class="mchip">Email CTR</span>
+      <span class="mchip">Enablement completion rate</span>
+      <span class="mchip">Grant initiation rate</span>
+      <span class="mchip">Login-related ticket volume</span>
+      <span class="mchip">Time-to-first DAF recommendation</span>
+    </div>
+  </div>
+</section>
+
+<!-- 04 LANDSCAPE -->
+<section id="landscape">
+  <div class="wrap">
+    <div class="sec-ey rv"><span class="sec-tag">05 · Competitive Landscape</span><span class="sec-label">Ren isn't competing with Fidelity Charitable for the same decision</span></div>
+    <h2 class="sec-h rv">The real choice a firm is making</h2>
+    <p class="sec-sub rv">Fidelity Charitable and Schwab Charitable (now DAFgiving360) are the names every DAF conversation starts with, and they're enormous: Fidelity alone granted $14.9 billion in 2024. For a wealth management firm, though, that's not the actual comparison on the table.</p>
+
+    <div class="rv" style="overflow-x:auto">
+      <table class="comp-table">
+        <thead><tr><th>Dimension</th><th class="hl">Ren-powered program</th><th>Fidelity Charitable / Schwab Charitable</th><th>Build an in-house program</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Whose brand the client sees</td>
+            <td class="hl">The firm's own name on the program, Ren stays invisible behind it</td>
+            <td>A competing wealth manager's brand, often the exact firm trying to retain that client</td>
+            <td>The firm's own name, but every workflow behind it has to be built from scratch</td>
+          </tr>
+          <tr>
+            <td>Advisor's role after launch</td>
+            <td class="hl">Unchanged: custody and investment-neutral, advisor keeps managing the relationship</td>
+            <td>Often diminished: the client's charitable assets sit with someone else's investment team</td>
+            <td>Unchanged, but the advisor inherits new administrative and compliance load too</td>
+          </tr>
+          <tr>
+            <td>Time to launch</td>
+            <td class="hl">Turnkey program available through Renaissance Charitable, or a dedicated branded instance</td>
+            <td>Not applicable, there's no firm-branded version to launch</td>
+            <td>Months to years, plus ongoing compliance and tax administration overhead</td>
+          </tr>
+          <tr>
+            <td>Grant disbursement</td>
+            <td class="hl">Rapid Disbursement Engine: over half of grants approved instantly, ACH payout</td>
+            <td>Mature, high-volume disbursement at consumer scale</td>
+            <td>Dependent on whatever the firm builds or contracts separately</td>
+          </tr>
+          <tr>
+            <td>Charity network</td>
+            <td class="hl">130,000+ charities reached annually, automatic vetting once a charity is validated</td>
+            <td>Large, well-established consumer-facing network</td>
+            <td>Starts from zero, vetting has to be built or bought</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="pull rv">For a wirehouse, the real competitive question was never "Ren versus Fidelity Charitable." It's whether the firm keeps that client's giving under its own name, or watches them quietly open an account somewhere else the next time the subject of charitable stock comes up.</p>
+  </div>
+</section>
+
+<!-- 06 OTHER WORK -->
+<section id="work" style="border-bottom:none">
+  <div class="wrap">
+    <div class="sec-ey rv"><span class="sec-tag">06 · Other Relevant Work</span><span class="sec-label">Selected past projects</span></div>
+    <h2 class="sec-h rv">Work across the same kinds of accounts</h2>
+
+    <div class="ow-grid rv">
+      <a href="https://bhanuexcalibur.github.io/Deltek/" target="_blank" rel="noopener" class="ow-card featured">
+        <div class="ow-top"><div class="ow-co">Deltek</div><span class="ow-arrow">↗</span></div>
+        <h3>Enterprise PMM for a Project-Based ERP</h3>
+        <p>A full PMM brief for Deltek, sold into professional services and government contracting firms. The buying motion is the same shape as Ren's: a multi-stakeholder enterprise account where the economic buyer, the day-to-day user, and the compliance owner each need a different argument before anyone signs.</p>
+        <div class="ow-tags"><span class="ow-tag">Enterprise B2B</span><span class="ow-tag">Multi-stakeholder buying</span><span class="ow-tag">Outcome-led positioning</span></div>
+      </a>
+
+      <a href="https://bhanuexcalibur.github.io/CashFree/" target="_blank" rel="noopener" class="ow-card">
+        <div class="ow-top"><div class="ow-co">Cashfree</div><span class="ow-arrow">↗</span></div>
+        <h3>GTM for a Regulated Cross-Border Payments Platform</h3>
+        <p>Positioning work for a cross-border payments platform operating under an RBI Payment Aggregator-Cross Border license, spanning 140+ currencies. The parallel to Ren: a regulated financial product where compliance isn't a constraint on the marketing, it's part of the pitch.</p>
+        <div class="ow-tags"><span class="ow-tag">Regulated fintech</span><span class="ow-tag">Compliance-led positioning</span></div>
+      </a>
+
+      <a href="https://bhanuexcalibur.github.io/RelayFi_PoW/" target="_blank" rel="noopener" class="ow-card">
+        <div class="ow-top"><div class="ow-co">Relay Financial</div><span class="ow-arrow">↗</span></div>
+        <h3>Segmenting One Product by Who's Actually Using It</h3>
+        <p>A messaging audit and GTM brief for a small business banking platform, broken out by owner type: the anxious owner, the scaling owner, the switcher. Same instinct the buyer map above uses: the product doesn't change, but the reason to care does, person to person.</p>
+        <div class="ow-tags"><span class="ow-tag">Financial services</span><span class="ow-tag">Owner segmentation</span></div>
+      </a>
+
+      <a href="https://bhanuexcalibur.github.io/Veeva/" target="_blank" rel="noopener" class="ow-card">
+        <div class="ow-top"><div class="ow-co">Veeva</div><span class="ow-arrow">↗</span></div>
+        <h3>Multi-Buyer Messaging Across Departments</h3>
+        <p>A messaging brief for Veeva Systems spanning Commercial, Medical Affairs, and IT. The transferable skill: one platform story that holds together across audiences with genuinely different incentives, which is most of what enterprise partner marketing actually is.</p>
+        <div class="ow-tags"><span class="ow-tag">Multi-buyer messaging</span><span class="ow-tag">Cross-functional PMM</span></div>
+      </a>
+
+      <a href="https://bhanuexcalibur.github.io/Boundless-PoW/" target="_blank" rel="noopener" class="ow-card">
+        <div class="ow-top"><div class="ow-co">Boundless</div><span class="ow-arrow">↗</span></div>
+        <h3>A Messaging Rewrite Built Around a Partnership Lead</h3>
+        <p>A three-buyer messaging rewrite for a compliance infrastructure product, split across a risk officer, a CTO, and a partnership lead. That last persona is the closest prior work to this role specifically: someone whose entire job is making one product land differently inside someone else's organization.</p>
+        <div class="ow-tags"><span class="ow-tag">Partner-facing messaging</span><span class="ow-tag">Compliance infra</span></div>
+      </a>
+    </div>
+
+    <p class="note rv" style="margin-top:30px">A note on this page: program facts, partner names, figures, and the Catalysts Club and Rapid Disbursement Engine details come from Ren's public site, advisor resources, and press materials, current as of mid-2026. The buyer map, the campaign brief, and the competitive read are my own strategic thinking, not confirmed internal information from Ren.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<section style="border-bottom:none;padding:0">
+  <div class="wrap">
+    <div class="footer">
+      <div>
+        <div class="footer-name">Bhanu Kumar</div>
+        <div class="footer-copy" style="margin-top:4px">B2B Product Marketing · Bengaluru</div>
+      </div>
+      <div class="footer-links">
+        <a href="https://www.linkedin.com/in/bhanuexcalibur/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://drive.google.com/file/d/1M4tArzx0SiazLaBY8UFWdzGS5mTumtgU/view" target="_blank" rel="noopener">Resume</a>
+        <a href="mailto:bhanukumar0902@gmail.com">Email</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// ── Reading bar ──────────────────────────────────────────────
+const rbar = document.getElementById('rbar');
+window.addEventListener('scroll', () => {
+  const doc = document.documentElement;
+  const pct = (doc.scrollTop / (doc.scrollHeight - doc.clientHeight)) * 100;
+  rbar.style.width = pct + '%';
+}, { passive: true });
+
+// ── Mobile menu ───────────────────────────────────────────────
+const hbg = document.getElementById('hbg');
+const mob = document.getElementById('mob-menu');
+hbg.addEventListener('click', () => { hbg.classList.toggle('open'); mob.classList.toggle('open'); });
+function closeMob(){ hbg.classList.remove('open'); mob.classList.remove('open'); }
+
+// ── Partner-skin slider (width-based, rAF batched) ─────────────
+(function(){
+  const container = document.getElementById('psContainer');
+  const before     = document.getElementById('psBefore');
+  const beforeInner= document.getElementById('psBeforeInner');
+  const divider    = document.getElementById('psDivider');
+  if (!container || !before || !divider) return;
+
+  let pct = 50, dragging = false, rafPending = false;
+
+  function syncDOM(){
+    rafPending = false;
+    const w = container.offsetWidth;
+    beforeInner.style.width = w + 'px';
+    before.style.width = pct + '%';
+    divider.style.left = pct + '%';
+  }
+  function setPos(clientX){
+    const rect = container.getBoundingClientRect();
+    let p = ((clientX - rect.left) / rect.width) * 100;
+    pct = Math.max(4, Math.min(96, p));
+    if (!rafPending){ rafPending = true; requestAnimationFrame(syncDOM); }
+  }
+  syncDOM();
+  window.addEventListener('resize', () => { if(!rafPending){ rafPending = true; requestAnimationFrame(syncDOM); } }, { passive:true });
+
+  let animStart = null;
+  function autoSweep(ts){
+    if (!animStart) animStart = ts;
+    const t = Math.min((ts - animStart) / 1100, 1);
+    const ease = t < .5 ? 2*t*t : -1+(4-2*t)*t;
+    if (t < .65){ pct = 50 + ease * 38; }
+    else { const t2 = (t-.65)/.35; const e2 = t2<.5?2*t2*t2:-1+(4-2*t2)*t2; pct = 88 - e2*38; }
+    if (!rafPending){ rafPending = true; requestAnimationFrame(syncDOM); }
+    if (t < 1) requestAnimationFrame(autoSweep);
+  }
+  setTimeout(() => requestAnimationFrame(autoSweep), 400);
+
+  container.addEventListener('mousedown', e => { dragging = true; setPos(e.clientX); e.preventDefault(); });
+  window.addEventListener('mousemove', e => { if (dragging) setPos(e.clientX); }, { passive:true });
+  window.addEventListener('mouseup', () => { dragging = false; });
+  container.addEventListener('touchstart', e => { dragging = true; setPos(e.touches[0].clientX); }, { passive:true });
+  window.addEventListener('touchmove', e => { if (dragging) setPos(e.touches[0].clientX); }, { passive:true });
+  window.addEventListener('touchend', () => { dragging = false; });
+})();
+
+// ── Buyer map personas ─────────────────────────────────────────
+var personas = {
+  sponsor: {
+    label: 'Buyer 01', name: 'The Program Sponsor',
+    role: 'Head of Wealth Management or philanthropy practice lead at a partner firm, decides whether to launch or expand a Ren-powered program',
+    pains: [
+      'Cannot offer a competitive charitable giving option without either building it internally or routing clients to a competitor\'s brand',
+      'Worried that adopting an outside platform means losing visibility into, or control over, a meaningful slice of client assets',
+      'Needs to justify the decision to leadership in terms of retention and AUM, not just client satisfaction'
+    ],
+    goals: [
+      'Wants a program that strengthens the firm\'s brand and advisor relationships, not one that quietly competes with them',
+      'Needs proof that custody and investment management genuinely stay in-house before signing anything',
+      'Cares about being able to say the firm offers a "best-in-class" giving experience without having built the back end themselves'
+    ],
+    message: "The choice was never between offering a DAF and not offering one. It's between your name on the program, or your client's next conversation happening on a competitor's platform."
+  },
+  advisor: {
+    label: 'Buyer 02', name: 'The Financial Advisor',
+    role: 'Individual advisor at a Ren-powered firm, the one who actually has to bring this up with a client',
+    pains: [
+      'Doesn\'t want to become the de facto charitable giving expert on top of an already full book of responsibilities',
+      'Has clients asking about tax-smart giving, especially after a stock sale or a high-income year, and no easy way to walk them through options',
+      'Lost time during Giving Season untangling login and account-status questions that feel like Ren\'s problem to solve, not theirs'
+    ],
+    goals: [
+      'Wants a one-line way to bring up giving in a portfolio review without sounding like a sales pitch',
+      'Needs confidence that recommending a DAF doesn\'t put the broader client relationship at risk',
+      'Cares about looking proactive to a client, not reactive to a tax deadline'
+    ],
+    message: "You don't need to become a philanthropy expert. You need one good sentence for the next portfolio review, and Ren built it so you can say it without giving anything up."
+  },
+  ops: {
+    label: 'Buyer 03', name: "The Firm's Program Operations Lead",
+    role: 'Day-to-day owner of the Ren relationship inside the partner firm, manages onboarding, compliance, and data flow',
+    pains: [
+      'Fields the advisor escalations when something in the integration or reporting doesn\'t match what the firm\'s own systems show',
+      'Has to translate Ren\'s platform updates into something the firm\'s compliance and advisor population actually understands',
+      'Gets judged internally on smooth Giving Season operations, even though most of the volume spike is genuinely seasonal and out of their control'
+    ],
+    goals: [
+      'Wants advance notice and clear talking points before any seasonal volume spike, not a reactive scramble in November',
+      'Needs marketing materials that match the firm\'s actual workflow and compliance language, not a generic template',
+      'Cares about being treated as a partner by Ren\'s marketing and enablement team, not just a support ticket queue'
+    ],
+    message: "This is the role this brief is written for: the person who has to make Ren's platform work inside someone else's organization, every single day, not just at launch."
+  }
+};
+var order = ['sponsor','advisor','ops'];
+function renderPersonas(active){
+  var tabs = document.getElementById('ptabs');
+  var card = document.getElementById('pcard');
+  tabs.innerHTML = order.map(function(k){
+    var p = personas[k];
+    return '<button class="ptab'+(k===active?' on':'')+'" onclick="renderPersonas(\''+k+'\')">'
+      +'<div class="ptab-label">'+p.label+'</div>'
+      +'<div class="ptab-name">'+p.name+'</div>'
+      +'<div class="ptab-role">'+p.role.split(',')[0]+'</div>'
+      +'</button>';
+  }).join('');
+  var p = personas[active];
+  card.innerHTML =
+    '<div class="pcard-hdr"><span class="tag">'+p.label+'</span><h4>'+p.name+'</h4><p>'+p.role+'</p></div>'
+    +'<div class="pcard-body">'
+    +'<div class="pcard-col"><h5>What keeps them up</h5><ul>'+p.pains.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>'
+    +'<div class="pcard-col"><h5>What they\'re actually optimizing for</h5><ul>'+p.goals.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>'
+    +'<div class="pcard-msg"><h5>How to open the conversation</h5><p>'+p.message+'</p></div>'
+    +'</div>';
+}
+renderPersonas('sponsor');
+
+// ── Scroll reveal ────────────────────────────────────────────
+if ('IntersectionObserver' in window){
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); } });
+  }, { threshold: 0.07, rootMargin: '0px 0px -16px 0px' });
+  document.querySelectorAll('.rv').forEach(function(el){ obs.observe(el); });
+} else {
+  document.querySelectorAll('.rv').forEach(function(el){ el.classList.add('in'); });
+}
+window.addEventListener('load', function(){
+  document.querySelectorAll('.rv').forEach(function(el){ if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('in'); });
+});
+</script>
+</body>
+</html>
